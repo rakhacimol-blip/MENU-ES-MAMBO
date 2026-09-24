@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Es Mambo Fearless - Segar, Manis & Lembut</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        },
+                        dark: {
+                            900: '#0b132b',
+                            800: '#1c2541',
+                            700: '#3a506b',
+                            600: '#5bc0be'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b132b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #06b6d4;
+            border-radius: 10px;
+        }
+
+        .glass-panel {
+            background: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px -5px rgba(6, 182, 212, 0.3);
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-stone-100 font-sans antialiased min-h-screen pb-24 selection:bg-cyan-500 selection:text-black">
+
+    <!-- Ambient Glow Background -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-cyan-600/20 via-blue-900/10 to-transparent blur-3xl pointer-events-none z-0"></div>
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-400 flex items-center justify-center text-dark-900 font-bold text-xl shadow-lg shadow-cyan-500/30">
+                    🧊
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg text-white tracking-tight flex items-center gap-2">
+                        ES MAMBO FEARLESS
+                    </h1>
+                    <div id="status-operational" class="flex items-center gap-1.5 text-xs text-stone-400">
+                        <!-- Dynamic Status JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Trigger Button -->
+            <button onclick="toggleCartModal()" class="relative p-2.5 rounded-xl bg-dark-700 hover:bg-slate-700 border border-slate-600 text-cyan-400 transition-all active:scale-95">
+                <i class="fa-solid fa-cart-shopping text-lg"></i>
+                <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-cyan-400 text-dark-900 text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-dark-900 animate-bounce">
+                    0
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-6 relative z-10">
+
+        <!-- Banner Info Jam Operasional & Nomor WA -->
+        <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-cyan-950/50 via-dark-800 to-dark-800 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl">
+                    <i class="fa-regular fa-clock text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-stone-400 font-medium">Jam Operasional Toko</p>
+                    <p class="text-sm font-bold text-stone-200">Setiap Hari: <span class="text-cyan-400">09.00 - 20.00 WIB</span></p>
+                </div>
+            </div>
+            <a href="https://wa.me/628118805082" target="_blank" class="text-xs px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 font-bold hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 w-fit">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                +62 811-8805-082
+            </a>
+        </div>
+
+        <!-- Search Bar & Filters -->
+        <div class="space-y-4 mb-6">
+            <!-- Search Input -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                <input type="text" id="search-input" oninput="renderMenu()" placeholder="Cari varian rasa kesukaanmu..." 
+                    class="w-full pl-11 pr-4 py-3 bg-dark-800 border border-slate-700 rounded-2xl text-stone-100 placeholder-stone-500 focus:outline-none focus:border-cyan-500 transition-all text-sm shadow-inner">
+            </div>
+
+            <!-- Categories Tabs -->
+            <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-sm font-medium">
+                <button onclick="setCategory('semua', this)" class="category-btn active px-4 py-2 rounded-xl whitespace-nowrap bg-cyan-500 text-dark-900 font-semibold shadow-md shadow-cyan-500/20 transition-all">
+                    🔥 Semua Varian
+                </button>
+                <button onclick="setCategory('creamy', this)" class="category-btn px-4 py-2 rounded-xl whitespace-nowrap bg-dark-800 text-stone-400 hover:text-stone-200 border border-slate-700 transition-all">
+                    🥛 Creamy & Susu
+                </button>
+                <button onclick="setCategory('buah', this)" class="category-btn px-4 py-2 rounded-xl whitespace-nowrap bg-dark-800 text-stone-400 hover:text-stone-200 border border-slate-700 transition-all">
+                    🍓 Buah Segar
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Grid Container -->
+        <div id="menu-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Dynamic Menu Items Rendered by JS -->
+        </div>
+    </main>
+
+    <!-- Floating Sticky Cart Bar (Bottom) -->
+    <div id="floating-cart" class="fixed bottom-4 left-4 right-4 max-w-xl mx-auto z-30 transition-all duration-300 transform translate-y-28 opacity-0">
+        <div class="glass-panel rounded-2xl p-3.5 shadow-2xl border border-cyan-500/40 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-basket-shopping text-lg"></i>
+                </div>
+                <div>
+                    <span id="floating-qty" class="text-xs text-stone-400 font-medium">0 Es Mambo</span>
+                    <p id="floating-total" class="font-extrabold text-cyan-400 text-base">Rp 0</p>
+                </div>
+            </div>
+            <button onclick="toggleCartModal()" class="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-dark-900 font-bold rounded-xl text-sm shadow-lg shadow-cyan-500/25 flex items-center gap-2 active:scale-95 transition-all">
+                <span>Lihat Pesanan</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Detail & Kustomisasi Produk -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-dark-800 border border-slate-700 w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="relative h-48 bg-slate-900 overflow-hidden">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-9 h-9 bg-dark-900/80 backdrop-blur text-stone-300 rounded-full flex items-center justify-center hover:text-white transition-all">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <div>
+                    <h3 id="modal-title" class="text-xl font-bold text-white"></h3>
+                    <p id="modal-desc" class="text-stone-400 text-xs mt-1"></p>
+                    <p id="modal-price" class="text-lg font-bold text-cyan-400 mt-2">Rp 2.000</p>
+                </div>
+
+                <!-- Catatan Khusus -->
+                <div class="space-y-2 pt-2 border-t border-slate-700">
+                    <label class="text-xs font-semibold text-stone-300">Catatan Tambahan (Opsional):</label>
+                    <input type="text" id="modal-note" placeholder="Contoh: Minta yang dingin banget / dibungkus terpisah" class="w-full px-3.5 py-2.5 bg-dark-900 border border-slate-700 rounded-xl text-xs text-stone-200 focus:outline-none focus:border-cyan-500">
+                </div>
+            </div>
+
+            <div class="p-4 bg-dark-900 border-t border-slate-700 flex items-center gap-3">
+                <div class="flex items-center bg-dark-700 border border-slate-700 rounded-xl px-2 py-1">
+                    <button onclick="changeModalQty(-1)" class="w-8 h-8 text-stone-300 hover:text-cyan-400 font-bold text-lg flex items-center justify-center">-</button>
+                    <span id="modal-qty" class="w-8 text-center font-bold text-white text-sm">1</span>
+                    <button onclick="changeModalQty(1)" class="w-8 h-8 text-stone-300 hover:text-cyan-400 font-bold text-lg flex items-center justify-center">+</button>
+                </div>
+                <button onclick="confirmAddToCart()" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-600 text-dark-900 font-extrabold rounded-xl text-sm transition-all shadow-lg shadow-cyan-500/20 active:scale-95">
+                    Tambah ke Pesanan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Drawer Keranjang / Checkout -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex justify-end hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-dark-800 w-full max-w-md h-full flex flex-col shadow-2xl border-l border-slate-700 transform transition-transform duration-300 translate-x-full" id="cart-drawer">
+            <!-- Cart Header -->
+            <div class="p-4 bg-dark-900 border-b border-slate-700 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-cyan-400 text-lg"></i>
+                    <h2 class="font-bold text-white text-base">Keranjang Es Mambo</h2>
+                </div>
+                <button onclick="toggleCartModal()" class="w-8 h-8 rounded-xl bg-dark-700 text-stone-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-3">
+                <!-- JS Inject -->
+            </div>
+
+            <!-- Form Pemesan -->
+            <div class="p-4 bg-dark-900/95 border-t border-slate-700 space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-300 mb-1">Nama Pemesan *</label>
+                    <input type="text" id="cust-name" placeholder="Masukkan nama Anda..." class="w-full px-3 py-2 bg-dark-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-300 mb-1">Alamat / Nomor Meja *</label>
+                    <input type="text" id="cust-address" placeholder="Contoh: Perum Indah Blok A / Meja 02" class="w-full px-3 py-2 bg-dark-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500">
+                </div>
+
+                <!-- Total Summary -->
+                <div class="pt-2 border-t border-slate-800 space-y-1">
+                    <div class="flex justify-between text-xs text-stone-400">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-extrabold text-white pt-1">
+                        <span>Total Pembayaran</span>
+                        <span id="cart-total" class="text-cyan-400">Rp 0</span>
+                    </div>
+                </div>
+
+                <!-- Submit WhatsApp Button -->
+                <button onclick="sendToWhatsApp()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-95 transition-all">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    Pesan Sekarang via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-cyan-400 text-dark-900 font-bold px-4 py-2.5 rounded-full shadow-xl text-xs flex items-center gap-2 pointer-events-none transition-all duration-300 opacity-0 -translate-y-4 z-50">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-msg">Varian berhasil ditambahkan!</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Database Varian Es Mambo Fearless (Semua Rp 2.000)
+        const menuData = [
+            {
+                id: 1,
+                title: "Es Mambo Matcha",
+                category: "creamy",
+                price: 2000,
+                desc: "Rasa matcha green tea khas dengan susu manis dan tekstur super lembut.",
+                image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80",
+                badge: "Best Seller"
+            },
+            {
+                id: 2,
+                title: "Es Mambo Coklat",
+                category: "creamy",
+                price: 2000,
+                desc: "Coklat pekat manis gurih dipadu susu creamy yang bikin ketagihan.",
+                image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=600&q=80",
+                badge: "Favorit"
+            },
+            {
+                id: 3,
+                title: "Es Mambo Stroberi",
+                category: "buah",
+                price: 2000,
+                desc: "Kesegaran stroberi asli dengan rasa manis asam segar yang pas.",
+                image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80",
+                badge: "Segar"
+            },
+            {
+                id: 4,
+                title: "Es Mambo Moca",
+                category: "creamy",
+                price: 2000,
+                desc: "Perpaduan rasa kopi dan coklat moca yang harum dan nikmat.",
+                image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80",
+                badge: "Mantap"
+            },
+            {
+                id: 5,
+                title: "Es Mambo Coffe",
+                category: "creamy",
+                price: 2000,
+                desc: "Aroma kopi mantap bercampur rasa manis susu murni yang segar.",
+                image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80",
+                badge: ""
+            },
+            {
+                id: 6,
+                title: "Es Mambo Nanas",
+                category: "buah",
+                price: 2000,
+                desc: "Ekstrak nanas tropis segar manis yang membangkitkan semangat.",
+                image: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=600&q=80",
+                badge: "Segar"
+            },
+            {
+                id: 7,
+                title: "Es Mambo Cocopandan",
+                category: "creamy",
+                price: 2000,
+                desc: "Aroma manis harum cocopandan tradisional yang khas dan nikmat.",
+                image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80",
+                badge: "Klasik"
+            }
+        ];
+
+        // State Aplikasi
+        let currentCategory = 'semua';
+        let cart = [];
+        let selectedProduct = null;
+        let modalQty = 1;
+
+        // Nomor WhatsApp Es Mambo Fearless
+        const WHATSAPP_NUMBER = "628118805082";
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            checkOperationalStatus();
+            renderMenu();
+        });
+
+        // Cek Jam Operasional (09.00 - 20.00 WIB)
+        function checkOperationalStatus() {
+            const statusEl = document.getElementById('status-operational');
+            const now = new Date();
+            const hours = now.getHours();
+            
+            const isOpen = hours >= 9 && hours < 20;
+
+            if (isOpen) {
+                statusEl.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-emerald-400 font-bold">BUKA SEKARANG</span> (09.00 - 20.00)
+                `;
+            } else {
+                statusEl.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="text-rose-400 font-bold">TUTUP</span> (Buka Jam 09.00 WIB)
+                `;
+            }
+        }
+
+        // Filter Kategori
+        function setCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('bg-cyan-500', 'text-dark-900', 'font-semibold', 'shadow-md', 'shadow-cyan-500/20');
+                b.classList.add('bg-dark-800', 'text-stone-400', 'border-slate-700');
+            });
+            btn.classList.remove('bg-dark-800', 'text-stone-400', 'border-slate-700');
+            btn.classList.add('bg-cyan-500', 'text-dark-900', 'font-semibold', 'shadow-md', 'shadow-cyan-500/20');
+
+            renderMenu();
+        }
+
+        // Render Menu Grid
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+
+            const filtered = menuData.filter(item => {
+                const matchCat = (currentCategory === 'semua') || (item.category === currentCategory);
+                const matchSearch = item.title.toLowerCase().includes(searchVal) || item.desc.toLowerCase().includes(searchVal);
+                return matchCat && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-stone-500">
+                        <i class="fa-solid fa-ice-cream text-4xl mb-3 text-slate-600"></i>
+                        <p class="text-sm">Varian rasa Es Mambo tidak ditemukan.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl overflow-hidden card-hover flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-36 overflow-hidden bg-slate-900">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                            ${item.badge ? `<span class="absolute top-3 left-3 bg-cyan-400 text-dark-900 font-extrabold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">${item.badge}</span>` : ''}
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-white text-base">${item.title}</h3>
+                            <p class="text-stone-400 text-xs mt-1 line-clamp-2">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 pt-1 flex items-center justify-between border-t border-slate-700/60">
+                        <span class="font-extrabold text-cyan-400 text-base">Rp ${item.price.toLocaleString('id-ID')}</span>
+                        <button onclick="openProductModal(${item.id})" class="px-3.5 py-2 bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-dark-900 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-plus"></i> Pesan
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Product Modal Logic
+        function openProductModal(id) {
+            selectedProduct = menuData.find(m => m.id === id);
+            modalQty = 1;
+
+            document.getElementById('modal-img').src = selectedProduct.image;
+            document.getElementById('modal-title').innerText = selectedProduct.title;
+            document.getElementById('modal-desc').innerText = selectedProduct.desc;
+            document.getElementById('modal-price').innerText = `Rp ${selectedProduct.price.toLocaleString('id-ID')}`;
+            document.getElementById('modal-qty').innerText = modalQty;
+            document.getElementById('modal-note').value = '';
+
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function changeModalQty(delta) {
+            if (modalQty + delta >= 1) {
+                modalQty += delta;
+                document.getElementById('modal-qty').innerText = modalQty;
+            }
+        }
+
+        function confirmAddToCart() {
+            const note = document.getElementById('modal-note').value.trim();
+
+            const existingIndex = cart.findIndex(item => 
+                item.id === selectedProduct.id && item.note === note
+            );
+
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += modalQty;
+            } else {
+                cart.push({
+                    id: selectedProduct.id,
+                    title: selectedProduct.title,
+                    price: selectedProduct.price,
+                    qty: modalQty,
+                    note: note
+                });
+            }
+
+            closeProductModal();
+            updateCartUI();
+            showToast(`" ${selectedProduct.title} " ditambahkan`);
+        }
+
+        // Cart UI Update
+        function updateCartUI() {
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            // Badge
+            const badge = document.getElementById('cart-badge');
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Floating Cart
+            const floatingCart = document.getElementById('floating-cart');
+            if (totalQty > 0) {
+                floatingCart.classList.remove('translate-y-28', 'opacity-0');
+                document.getElementById('floating-qty').innerText = `${totalQty} Es Mambo`;
+                document.getElementById('floating-total').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            } else {
+                floatingCart.classList.add('translate-y-28', 'opacity-0');
+            }
+
+            // Drawer Items
+            const cartItemsEl = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                cartItemsEl.innerHTML = `
+                    <div class="text-center py-16 text-stone-500">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-2 text-slate-600"></i>
+                        <p class="text-xs">Keranjang Es Mambo Anda masih kosong.</p>
+                    </div>
+                `;
+            } else {
+                cartItemsEl.innerHTML = cart.map((item, idx) => `
+                    <div class="p-3 bg-dark-900 border border-slate-700/80 rounded-xl flex items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-white text-xs">${item.title}</h4>
+                            <p class="text-[11px] text-cyan-400 font-semibold mt-0.5">Rp ${item.price.toLocaleString('id-ID')} / pcs</p>
+                            ${item.note ? `<p class="text-[10px] text-stone-400 italic mt-0.5">"${item.note}"</p>` : ''}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center bg-slate-800 rounded-lg">
+                                <button onclick="updateCartItemQty(${idx}, -1)" class="w-6 h-6 text-stone-300 hover:text-white font-bold flex items-center justify-center text-xs">-</button>
+                                <span class="w-5 text-center text-xs font-bold text-white">${item.qty}</span>
+                                <button onclick="updateCartItemQty(${idx}, 1)" class="w-6 h-6 text-stone-300 hover:text-white font-bold flex items-center justify-center text-xs">+</button>
+                            </div>
+                            <button onclick="removeCartItem(${idx})" class="text-stone-500 hover:text-rose-400 p-1">
+                                <i class="fa-regular fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('cart-subtotal').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+            document.getElementById('cart-total').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+        }
+
+        function updateCartItemQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cart-modal');
+            const drawer = document.getElementById('cart-drawer');
+
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                drawer.classList.add('translate-x-full');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // WhatsApp Order Dispatch
+        function sendToWhatsApp() {
+            if (cart.length === 0) {
+                alert("Keranjang belanja Anda masih kosong!");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (!name) {
+                alert("Harap isi Nama Pemesan terlebih dahulu.");
+                document.getElementById('cust-name').focus();
+                return;
+            }
+
+            if (!address) {
+                alert("Harap isi Alamat / Nomor Meja Anda.");
+                document.getElementById('cust-address').focus();
+                return;
+            }
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const totalPcs = cart.reduce((sum, item) => sum + item.qty, 0);
+
+            // WhatsApp Message Format
+            let text = `🧊 *PESANAN BARU - ES MAMBO FEARLESS*\n`;
+            text += `-------------------------------------------\n`;
+            text += `👤 *Nama Pemesan:* ${name}\n`;
+            text += `📍 *Alamat / Meja:* ${address}\n`;
+            text += `-------------------------------------------\n\n`;
+            text += `📝 *RINCIAN PESANAN (${totalPcs} Pcs):*\n`;
+
+            cart.forEach((item, i) => {
+                const sub = item.price * item.qty;
+                text += `${i + 1}. *${item.title}* (${item.qty}x)\n`;
+                if (item.note) text += `   └ Catatan: _${item.note}_\n`;
+                text += `   └ Subtotal: Rp ${sub.toLocaleString('id-ID')}\n\n`;
+            });
+
+            text += `-------------------------------------------\n`;
+            text += `💰 *TOTAL PEMBAYARAN:* *Rp ${totalPrice.toLocaleString('id-ID')}*\n`;
+            text += `-------------------------------------------\n`;
+            text += `Mohon segera diproses ya, terima kasih! 🙏`;
+
+            const encodedURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+            window.open(encodedURL, '_blank');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+
+            toast.classList.remove('opacity-0', '-translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-4');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
