@@ -9,7 +9,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -18,15 +18,16 @@
                 extend: {
                     colors: {
                         cyan: {
+                            300: '#67e8f9',
                             400: '#22d3ee',
                             500: '#06b6d4',
                             600: '#0891b2',
                         },
                         dark: {
+                            950: '#030712',
                             900: '#0b132b',
                             800: '#1c2541',
-                            700: '#3a506b',
-                            600: '#5bc0be'
+                            700: '#2e3b5e',
                         }
                     },
                     fontFamily: {
@@ -38,30 +39,91 @@
     </script>
 
     <style>
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0b132b;
+            background: #030712;
         }
         ::-webkit-scrollbar-thumb {
             background: #06b6d4;
             border-radius: 10px;
         }
 
+        /* Glassmorphism Panel */
         .glass-panel {
-            background: rgba(28, 37, 65, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(34, 211, 238, 0.2);
+            background: rgba(28, 37, 65, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(34, 211, 238, 0.25);
         }
 
+        .glass-modal {
+            background: rgba(11, 19, 43, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        /* Hover Animations & Glow Effects */
         .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .card-hover:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 25px -5px rgba(6, 182, 212, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(6, 182, 212, 0.4);
+        }
+
+        /* Glowing Shimmer Effect on Buttons */
+        .btn-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent,
+                rgba(255, 255, 255, 0.25),
+                transparent
+            );
+            transform: rotate(30deg);
+            animation: shimmerEffect 4s infinite;
+        }
+
+        @keyframes shimmerEffect {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            20% { transform: translateX(100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        /* Floating Animation for Ice Particles */
+        @keyframes floatParticle {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-25px) rotate(180deg); opacity: 0.8; }
+            100% { transform: translateY(0px) rotate(360deg); opacity: 0.3; }
+        }
+        .animate-float-slow {
+            animation: floatParticle 8s ease-in-out infinite;
+        }
+        .animate-float-fast {
+            animation: floatParticle 5s ease-in-out infinite;
+        }
+
+        /* Pulse Neon Border */
+        @keyframes neonPulse {
+            0%, 100% { border-color: rgba(34, 211, 238, 0.3); box-shadow: 0 0 10px rgba(6, 182, 212, 0.2); }
+            50% { border-color: rgba(34, 211, 238, 0.8); box-shadow: 0 0 22px rgba(6, 182, 212, 0.5); }
+        }
+        .neon-border {
+            animation: neonPulse 3s infinite;
         }
 
         .no-scrollbar::-webkit-scrollbar {
@@ -73,35 +135,56 @@
         }
     </style>
 </head>
-<body class="bg-dark-900 text-stone-100 font-sans antialiased min-h-screen pb-24 selection:bg-cyan-500 selection:text-black">
+<body class="bg-dark-950 text-stone-100 font-sans antialiased min-h-screen pb-28 selection:bg-cyan-500 selection:text-black overflow-x-hidden">
 
-    <!-- Ambient Glow Background -->
-    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-cyan-600/20 via-blue-900/10 to-transparent blur-3xl pointer-events-none z-0"></div>
+    <!-- Background Ambient Glow & Floating Ice Particles -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[30rem] bg-gradient-to-b from-cyan-500/20 via-blue-800/10 to-transparent blur-3xl pointer-events-none z-0"></div>
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-1/4 left-10 text-cyan-400/20 text-3xl animate-float-slow">🧊</div>
+        <div class="absolute top-1/3 right-12 text-cyan-300/20 text-4xl animate-float-fast">❄️</div>
+        <div class="absolute top-2/3 left-1/5 text-blue-400/20 text-2xl animate-float-slow">✨</div>
+        <div class="absolute top-3/4 right-1/4 text-cyan-400/20 text-3xl animate-float-fast">🧊</div>
+    </div>
 
     <!-- Header Section -->
-    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+    <header class="sticky top-0 z-40 glass-panel border-b border-cyan-500/20 shadow-xl shadow-black/40">
+        <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-400 flex items-center justify-center text-dark-900 font-bold text-xl shadow-lg shadow-cyan-500/30">
-                    🧊
+                <div class="relative group">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-500 to-cyan-300 flex items-center justify-center text-dark-950 font-black text-2xl shadow-lg shadow-cyan-500/40 group-hover:rotate-12 transition-transform duration-300">
+                        🧊
+                    </div>
+                    <span class="absolute -bottom-1 -right-1 flex h-3.5 w-3.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-cyan-500"></span>
+                    </span>
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-lg text-white tracking-tight flex items-center gap-2">
+                    <h1 class="font-black text-xl text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-100 to-cyan-300 tracking-tight flex items-center gap-2">
                         ES MAMBO FEARLESS
                     </h1>
-                    <div id="status-operational" class="flex items-center gap-1.5 text-xs text-stone-400">
+                    <div id="status-operational" class="flex items-center gap-1.5 text-xs text-stone-400 font-medium">
                         <!-- Dynamic Status JS -->
                     </div>
                 </div>
             </div>
 
-            <!-- Cart Trigger Button -->
-            <button onclick="toggleCartModal()" class="relative p-2.5 rounded-xl bg-dark-700 hover:bg-slate-700 border border-slate-600 text-cyan-400 transition-all active:scale-95">
-                <i class="fa-solid fa-cart-shopping text-lg"></i>
-                <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-cyan-400 text-dark-900 text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-dark-900 animate-bounce">
-                    0
-                </span>
-            </button>
+            <!-- Action Buttons Header -->
+            <div class="flex items-center gap-2.5">
+                <!-- Button Report Penjualan (Keuangan / Terjual) -->
+                <button onclick="openReportModal()" class="btn-shimmer px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-amber-600/20 border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-400 transition-all active:scale-95 flex items-center gap-2 text-xs font-bold shadow-lg shadow-amber-500/10" title="Report Penjualan">
+                    <i class="fa-solid fa-chart-line text-sm text-amber-400 animate-pulse"></i>
+                    <span class="hidden sm:inline">Report Penjualan</span>
+                </button>
+
+                <!-- Cart Trigger Button -->
+                <button onclick="toggleCartModal()" class="relative p-2.5 rounded-2xl bg-dark-800 hover:bg-dark-700 border border-cyan-500/30 text-cyan-400 transition-all active:scale-95 shadow-md shadow-cyan-500/10">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 text-dark-950 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-dark-950 shadow-md animate-bounce">
+                        0
+                    </span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -109,64 +192,64 @@
     <main class="max-w-4xl mx-auto px-4 pt-6 relative z-10">
 
         <!-- Banner Info Jam Operasional & Nomor WA -->
-        <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-cyan-950/50 via-dark-800 to-dark-800 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
-            <div class="flex items-center gap-3">
-                <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-xl">
-                    <i class="fa-regular fa-clock text-xl"></i>
+        <div class="mb-6 p-4 rounded-3xl bg-gradient-to-r from-cyan-950/60 via-dark-800/80 to-dark-800 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xl neon-border">
+            <div class="flex items-center gap-3.5">
+                <div class="p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/10 text-cyan-300 rounded-2xl border border-cyan-500/30">
+                    <i class="fa-regular fa-clock text-2xl"></i>
                 </div>
                 <div>
-                    <p class="text-xs text-stone-400 font-medium">Jam Operasional Toko</p>
-                    <p class="text-sm font-bold text-stone-200">Setiap Hari: <span class="text-cyan-400">09.00 - 20.00 WIB</span></p>
+                    <p class="text-xs text-stone-400 font-semibold uppercase tracking-wider">Jam Operasional Toko</p>
+                    <p class="text-sm font-bold text-stone-100">Setiap Hari: <span class="text-cyan-400 font-extrabold">09.00 - 20.00 WIB</span></p>
                 </div>
             </div>
-            <a href="https://wa.me/628118805082" target="_blank" class="text-xs px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 font-bold hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 w-fit">
-                <i class="fa-brands fa-whatsapp text-sm"></i>
+            <a href="https://wa.me/628118805082" target="_blank" class="btn-shimmer text-xs px-4 py-2.5 rounded-2xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 font-bold hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-2 w-fit shadow-lg shadow-emerald-600/20 active:scale-95">
+                <i class="fa-brands fa-whatsapp text-base"></i>
                 +62 811-8805-082
             </a>
         </div>
 
         <!-- Search Bar & Filters -->
-        <div class="space-y-4 mb-6">
+        <div class="space-y-4 mb-8">
             <!-- Search Input -->
-            <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
-                <input type="text" id="search-input" oninput="renderMenu()" placeholder="Cari varian rasa kesukaanmu..." 
-                    class="w-full pl-11 pr-4 py-3 bg-dark-800 border border-slate-700 rounded-2xl text-stone-100 placeholder-stone-500 focus:outline-none focus:border-cyan-500 transition-all text-sm shadow-inner">
+            <div class="relative group">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-cyan-400 transition-colors"></i>
+                <input type="text" id="search-input" oninput="renderMenu()" placeholder="Cari varian rasa es mambo favoritmu..." 
+                    class="w-full pl-11 pr-4 py-3.5 bg-dark-800/90 border border-slate-700/80 rounded-2xl text-stone-100 placeholder-stone-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm shadow-inner">
             </div>
 
             <!-- Categories Tabs -->
-            <div class="flex gap-2 overflow-x-auto no-scrollbar py-1 text-sm font-medium">
-                <button onclick="setCategory('semua', this)" class="category-btn active px-4 py-2 rounded-xl whitespace-nowrap bg-cyan-500 text-dark-900 font-semibold shadow-md shadow-cyan-500/20 transition-all">
+            <div class="flex gap-2.5 overflow-x-auto no-scrollbar py-1 text-sm font-semibold">
+                <button onclick="setCategory('semua', this)" class="category-btn active px-4 py-2.5 rounded-2xl whitespace-nowrap bg-gradient-to-r from-cyan-400 to-cyan-500 text-dark-950 font-extrabold shadow-lg shadow-cyan-500/30 transition-all">
                     🔥 Semua Varian
                 </button>
-                <button onclick="setCategory('creamy', this)" class="category-btn px-4 py-2 rounded-xl whitespace-nowrap bg-dark-800 text-stone-400 hover:text-stone-200 border border-slate-700 transition-all">
+                <button onclick="setCategory('creamy', this)" class="category-btn px-4 py-2.5 rounded-2xl whitespace-nowrap bg-dark-800 text-stone-400 hover:text-stone-200 border border-slate-700/80 transition-all">
                     🥛 Creamy & Susu
                 </button>
-                <button onclick="setCategory('buah', this)" class="category-btn px-4 py-2 rounded-xl whitespace-nowrap bg-dark-800 text-stone-400 hover:text-stone-200 border border-slate-700 transition-all">
+                <button onclick="setCategory('buah', this)" class="category-btn px-4 py-2.5 rounded-2xl whitespace-nowrap bg-dark-800 text-stone-400 hover:text-stone-200 border border-slate-700/80 transition-all">
                     🍓 Buah Segar
                 </button>
             </div>
         </div>
 
         <!-- Menu Grid Container -->
-        <div id="menu-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div id="menu-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             <!-- Dynamic Menu Items Rendered by JS -->
         </div>
     </main>
 
     <!-- Floating Sticky Cart Bar (Bottom) -->
-    <div id="floating-cart" class="fixed bottom-4 left-4 right-4 max-w-xl mx-auto z-30 transition-all duration-300 transform translate-y-28 opacity-0">
-        <div class="glass-panel rounded-2xl p-3.5 shadow-2xl border border-cyan-500/40 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-basket-shopping text-lg"></i>
+    <div id="floating-cart" class="fixed bottom-5 left-4 right-4 max-w-xl mx-auto z-30 transition-all duration-500 transform translate-y-32 opacity-0 pointer-events-none">
+        <div class="glass-panel rounded-3xl p-4 shadow-2xl border border-cyan-400/40 flex items-center justify-between pointer-events-auto">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-xl border border-cyan-400/30 animate-pulse">
+                    <i class="fa-solid fa-basket-shopping"></i>
                 </div>
                 <div>
-                    <span id="floating-qty" class="text-xs text-stone-400 font-medium">0 Es Mambo</span>
-                    <p id="floating-total" class="font-extrabold text-cyan-400 text-base">Rp 0</p>
+                    <span id="floating-qty" class="text-xs text-stone-400 font-semibold">0 Es Mambo</span>
+                    <p id="floating-total" class="font-black text-cyan-400 text-lg">Rp 0</p>
                 </div>
             </div>
-            <button onclick="toggleCartModal()" class="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-dark-900 font-bold rounded-xl text-sm shadow-lg shadow-cyan-500/25 flex items-center gap-2 active:scale-95 transition-all">
+            <button onclick="toggleCartModal()" class="btn-shimmer px-5 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-dark-950 font-black rounded-2xl text-sm shadow-xl shadow-cyan-500/30 flex items-center gap-2 active:scale-95 transition-all">
                 <span>Lihat Pesanan</span>
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -174,35 +257,41 @@
     </div>
 
     <!-- Modal Detail & Kustomisasi Produk -->
-    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-dark-800 border border-slate-700 w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="relative h-48 bg-slate-900 overflow-hidden">
-                <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
-                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-9 h-9 bg-dark-900/80 backdrop-blur text-stone-300 rounded-full flex items-center justify-center hover:text-white transition-all">
+    <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="glass-modal w-full max-w-lg rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh] border border-cyan-500/30">
+            <div class="relative h-52 bg-slate-900 overflow-hidden">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-black/30"></div>
+                <button onclick="closeProductModal()" class="absolute top-4 right-4 w-10 h-10 bg-dark-950/80 backdrop-blur text-stone-300 rounded-full flex items-center justify-center hover:text-white hover:bg-dark-950 transition-all border border-white/10">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             <div class="p-6 overflow-y-auto space-y-4">
                 <div>
-                    <h3 id="modal-title" class="text-xl font-bold text-white"></h3>
-                    <p id="modal-desc" class="text-stone-400 text-xs mt-1"></p>
-                    <p id="modal-price" class="text-lg font-bold text-cyan-400 mt-2">Rp 2.000</p>
+                    <h3 id="modal-title" class="text-2xl font-black text-white"></h3>
+                    <p id="modal-desc" class="text-stone-300 text-xs mt-1 leading-relaxed"></p>
+                    <div class="flex items-center justify-between mt-4">
+                        <p id="modal-price" class="text-xl font-black text-cyan-400">Rp 2.000</p>
+                        <span id="modal-sold" class="text-xs text-amber-300 font-bold bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/30 flex items-center gap-1.5">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Terjual: 0 pcs
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Catatan Khusus -->
-                <div class="space-y-2 pt-2 border-t border-slate-700">
-                    <label class="text-xs font-semibold text-stone-300">Catatan Tambahan (Opsional):</label>
-                    <input type="text" id="modal-note" placeholder="Contoh: Minta yang dingin banget / dibungkus terpisah" class="w-full px-3.5 py-2.5 bg-dark-900 border border-slate-700 rounded-xl text-xs text-stone-200 focus:outline-none focus:border-cyan-500">
+                <div class="space-y-2 pt-3 border-t border-slate-700/80">
+                    <label class="text-xs font-bold text-stone-200">Catatan Tambahan (Opsional):</label>
+                    <input type="text" id="modal-note" placeholder="Contoh: Minta yang dingin beku / dibungkus plastik terpisah" class="w-full px-4 py-3 bg-dark-950/80 border border-slate-700 rounded-2xl text-xs text-stone-100 placeholder-stone-500 focus:outline-none focus:border-cyan-400 transition-all">
                 </div>
             </div>
 
-            <div class="p-4 bg-dark-900 border-t border-slate-700 flex items-center gap-3">
-                <div class="flex items-center bg-dark-700 border border-slate-700 rounded-xl px-2 py-1">
-                    <button onclick="changeModalQty(-1)" class="w-8 h-8 text-stone-300 hover:text-cyan-400 font-bold text-lg flex items-center justify-center">-</button>
-                    <span id="modal-qty" class="w-8 text-center font-bold text-white text-sm">1</span>
-                    <button onclick="changeModalQty(1)" class="w-8 h-8 text-stone-300 hover:text-cyan-400 font-bold text-lg flex items-center justify-center">+</button>
+            <div class="p-4 bg-dark-950/90 border-t border-slate-700/80 flex items-center gap-3">
+                <div class="flex items-center bg-dark-800 border border-slate-700 rounded-2xl px-3 py-1.5">
+                    <button onclick="changeModalQty(-1)" class="w-8 h-8 text-stone-300 hover:text-cyan-400 font-black text-lg flex items-center justify-center transition-colors">-</button>
+                    <span id="modal-qty" class="w-8 text-center font-black text-white text-base">1</span>
+                    <button onclick="changeModalQty(1)" class="w-8 h-8 text-stone-300 hover:text-cyan-400 font-black text-lg flex items-center justify-center transition-colors">+</button>
                 </div>
-                <button onclick="confirmAddToCart()" class="flex-1 py-3 bg-cyan-500 hover:bg-cyan-600 text-dark-900 font-extrabold rounded-xl text-sm transition-all shadow-lg shadow-cyan-500/20 active:scale-95">
+                <button onclick="confirmAddToCart()" class="btn-shimmer flex-1 py-3.5 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-dark-950 font-black rounded-2xl text-sm transition-all shadow-lg shadow-cyan-500/25 active:scale-95">
                     Tambah ke Pesanan
                 </button>
             </div>
@@ -210,15 +299,17 @@
     </div>
 
     <!-- Modal Drawer Keranjang / Checkout -->
-    <div id="cart-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex justify-end hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-dark-800 w-full max-w-md h-full flex flex-col shadow-2xl border-l border-slate-700 transform transition-transform duration-300 translate-x-full" id="cart-drawer">
+    <div id="cart-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex justify-end hidden transition-opacity duration-300 opacity-0">
+        <div class="glass-modal w-full max-w-md h-full flex flex-col shadow-2xl border-l border-cyan-500/30 transform transition-transform duration-300 translate-x-full" id="cart-drawer">
             <!-- Cart Header -->
-            <div class="p-4 bg-dark-900 border-b border-slate-700 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-basket-shopping text-cyan-400 text-lg"></i>
-                    <h2 class="font-bold text-white text-base">Keranjang Es Mambo</h2>
+            <div class="p-4 bg-dark-950/90 border-b border-slate-700 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <h2 class="font-black text-white text-base tracking-tight">Keranjang Es Mambo</h2>
                 </div>
-                <button onclick="toggleCartModal()" class="w-8 h-8 rounded-xl bg-dark-700 text-stone-400 hover:text-white flex items-center justify-center">
+                <button onclick="toggleCartModal()" class="w-8 h-8 rounded-xl bg-dark-800 text-stone-400 hover:text-white flex items-center justify-center border border-slate-700 transition-colors">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -228,53 +319,101 @@
                 <!-- JS Inject -->
             </div>
 
-            <!-- Form Pemesan -->
-            <div class="p-4 bg-dark-900/95 border-t border-slate-700 space-y-3">
+            <!-- Form Pemesan (Hanya Nama, Tanpa Alamat/Meja) -->
+            <div class="p-4 bg-dark-950 border-t border-slate-700/90 space-y-3.5">
                 <div>
-                    <label class="block text-xs font-semibold text-stone-300 mb-1">Nama Pemesan *</label>
-                    <input type="text" id="cust-name" placeholder="Masukkan nama Anda..." class="w-full px-3 py-2 bg-dark-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-stone-300 mb-1">Alamat / Nomor Meja *</label>
-                    <input type="text" id="cust-address" placeholder="Contoh: Perum Indah Blok A / Meja 02" class="w-full px-3 py-2 bg-dark-800 border border-slate-700 rounded-xl text-xs text-white focus:outline-none focus:border-cyan-500">
+                    <label class="block text-xs font-bold text-stone-200 mb-1.5">Nama Pemesan *</label>
+                    <input type="text" id="cust-name" placeholder="Masukkan nama panggilan Anda..." class="w-full px-3.5 py-2.5 bg-dark-800 border border-slate-700 rounded-xl text-xs text-white placeholder-stone-500 focus:outline-none focus:border-cyan-400 transition-all">
                 </div>
 
                 <!-- Total Summary -->
-                <div class="pt-2 border-t border-slate-800 space-y-1">
-                    <div class="flex justify-between text-xs text-stone-400">
-                        <span>Subtotal</span>
-                        <span id="cart-subtotal">Rp 0</span>
+                <div class="pt-3 border-t border-slate-800 space-y-1.5">
+                    <div class="flex justify-between text-xs text-stone-400 font-medium">
+                        <span>Subtotal Rincian</span>
+                        <span id="cart-subtotal" class="font-bold text-stone-200">Rp 0</span>
                     </div>
-                    <div class="flex justify-between text-sm font-extrabold text-white pt-1">
+                    <div class="flex justify-between text-base font-black text-white pt-1">
                         <span>Total Pembayaran</span>
                         <span id="cart-total" class="text-cyan-400">Rp 0</span>
                     </div>
                 </div>
 
                 <!-- Submit WhatsApp Button -->
-                <button onclick="sendToWhatsApp()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-95 transition-all">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                <button onclick="sendToWhatsApp()" class="btn-shimmer w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-600/30 active:scale-95 transition-all">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
                     Pesan Sekarang via WhatsApp
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- Modal Report Penjualan (Laporan Keuangan Terjual) -->
+    <div id="report-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="glass-modal border border-amber-500/30 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-dark-950/90 border-b border-amber-500/20 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg border border-amber-500/30">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-white text-base tracking-tight">Laporan Penjualan Toko</h2>
+                        <p class="text-[10px] text-amber-400/80 font-medium">Statistik Terjual & Perkiraan Omzet</p>
+                    </div>
+                </div>
+                <button onclick="closeReportModal()" class="w-8 h-8 rounded-xl bg-dark-800 text-stone-400 hover:text-white flex items-center justify-center border border-slate-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-5">
+                <!-- Stat Summary Cards -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    <div class="p-4 bg-dark-950/80 border border-cyan-500/30 rounded-2xl text-center relative overflow-hidden group">
+                        <div class="absolute -right-3 -bottom-3 text-cyan-500/10 text-6xl group-hover:scale-125 transition-transform"><i class="fa-solid fa-box-open"></i></div>
+                        <p class="text-[11px] text-stone-400 font-bold uppercase tracking-wider">Total Terjual</p>
+                        <p id="total-sold-count" class="text-3xl font-black text-cyan-400 mt-1">0 Pcs</p>
+                    </div>
+                    <div class="p-4 bg-dark-950/80 border border-emerald-500/30 rounded-2xl text-center relative overflow-hidden group">
+                        <div class="absolute -right-3 -bottom-3 text-emerald-500/10 text-6xl group-hover:scale-125 transition-transform"><i class="fa-solid fa-sack-dollar"></i></div>
+                        <p class="text-[11px] text-stone-400 font-bold uppercase tracking-wider">Perkiraan Omzet</p>
+                        <p id="total-revenue-count" class="text-2xl font-black text-emerald-400 mt-1">Rp 0</p>
+                    </div>
+                </div>
+
+                <!-- Product Sales Breakdown with Bars -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-xs font-black text-stone-200 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-fire text-amber-400"></i> Terlaris Per Rasa
+                        </h4>
+                        <button onclick="resetSalesStats()" class="text-[10px] text-rose-400 hover:text-rose-300 underline font-semibold">
+                            Reset Statistik
+                        </button>
+                    </div>
+                    <div id="report-list" class="space-y-2.5">
+                        <!-- JS Dynamic Inject Breakdown -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
-    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-cyan-400 text-dark-900 font-bold px-4 py-2.5 rounded-full shadow-xl text-xs flex items-center gap-2 pointer-events-none transition-all duration-300 opacity-0 -translate-y-4 z-50">
-        <i class="fa-solid fa-circle-check"></i>
+    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-blue-500 text-dark-950 font-black px-5 py-3 rounded-full shadow-2xl text-xs flex items-center gap-2.5 pointer-events-none transition-all duration-300 opacity-0 -translate-y-6 z-50 border border-white/20">
+        <i class="fa-solid fa-circle-check text-sm"></i>
         <span id="toast-msg">Varian berhasil ditambahkan!</span>
     </div>
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Database Varian Es Mambo Fearless (Semua Rp 2.000)
-        const menuData = [
+        // Database Varian Es Mambo Fearless (Harga Flat Rp 2.000)
+        let menuData = [
             {
                 id: 1,
                 title: "Es Mambo Matcha",
                 category: "creamy",
                 price: 2000,
+                sold: 142,
                 desc: "Rasa matcha green tea khas dengan susu manis dan tekstur super lembut.",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxIZyYc5XmVA_hX7KQxSg2H5ftFxhAIeg1VngNSWMQh9QHG-3aL90qPtGL&s=10",
                 badge: "Best Seller"
@@ -284,6 +423,7 @@
                 title: "Es Mambo Coklat",
                 category: "creamy",
                 price: 2000,
+                sold: 198,
                 desc: "Coklat pekat manis gurih dipadu susu creamy yang bikin ketagihan.",
                 image: "https://api.omela.com/storage/content-editor-images/7u2ZetZ0NO6GZFAOmkKy0yFloOeX1ytq8vpaEwZd.jpg",
                 badge: "Favorit"
@@ -293,6 +433,7 @@
                 title: "Es Mambo Stroberi",
                 category: "buah",
                 price: 2000,
+                sold: 85,
                 desc: "Kesegaran stroberi asli dengan rasa manis asam segar yang pas.",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2U0pSWV4-d_Hznsrl9Lb3KgHtv_mVRni81xd6VTLYcnQXT3oKjPpKYJg&s=10",
                 badge: "Segar"
@@ -302,6 +443,7 @@
                 title: "Es Mambo Moca",
                 category: "creamy",
                 price: 2000,
+                sold: 64,
                 desc: "Perpaduan rasa kopi dan coklat moca yang harum dan nikmat.",
                 image: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXeJeiVAqzO7Zcejv6w7q9jqLk8_KZxLBycypA9RqjGJaSXI5FYk-K3bxzAGYA_c9Xircl4_4R4jVFKHAmwumpMKO6rkKYSR9xYh7RV_W_4QfxDRZg2CJ_JcBOPIVFAo4ygkM1G4fw?key=-pBQTo6-NIE4ZRPZk6A_LdB1",
                 badge: "Mantap"
@@ -311,6 +453,7 @@
                 title: "Es Mambo Coffe",
                 category: "creamy",
                 price: 2000,
+                sold: 52,
                 desc: "Aroma kopi mantap bercampur rasa manis susu murni yang segar.",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcDLP68WzrJFDWRhbSZhwKbMHcjIgDxmKpBTUpX8hP5sFwLQ-mdAPIUN4&s=10",
                 badge: ""
@@ -320,6 +463,7 @@
                 title: "Es Mambo Nanas",
                 category: "buah",
                 price: 2000,
+                sold: 77,
                 desc: "Ekstrak nanas tropis segar manis yang membangkitkan semangat.",
                 image: "https://img-global.cpcdn.com/steps/50e91eb8ab0c0f1f/400x400cq80/photo.jpg",
                 badge: "Segar"
@@ -329,6 +473,7 @@
                 title: "Es Mambo Cocopandan",
                 category: "creamy",
                 price: 2000,
+                sold: 91,
                 desc: "Aroma manis harum cocopandan tradisional yang khas dan nikmat.",
                 image: "https://cdn.yummy.co.id/content-images/images/20191222/zWmp5pDxszR0ZrIyqpu8vJIK0Jo6tNFq-31353730303536343633d41d8cd98f00b204e9800998ecf8427e.jpg?x-oss-process=image/resize,w_600,h_600,m_fill,image/format,webp",
                 badge: "Klasik"
@@ -344,47 +489,68 @@
         // Nomor WhatsApp Es Mambo Fearless
         const WHATSAPP_NUMBER = "628118805082";
 
+        // Load & Save Sold Stats in Local Storage (Persistent Data)
+        function loadSoldData() {
+            const savedStats = localStorage.getItem('es_mambo_sales');
+            if (savedStats) {
+                const parsed = JSON.parse(savedStats);
+                menuData.forEach(item => {
+                    if (parsed[item.id] !== undefined) {
+                        item.sold = parsed[item.id];
+                    }
+                });
+            }
+        }
+
+        function saveSoldData() {
+            const stats = {};
+            menuData.forEach(item => {
+                stats[item.id] = item.sold;
+            });
+            localStorage.setItem('es_mambo_sales', JSON.stringify(stats));
+        }
+
         // Initialization
         document.addEventListener('DOMContentLoaded', () => {
+            loadSoldData();
             checkOperationalStatus();
             renderMenu();
         });
 
-        // Cek Jam Operasional (09.00 - 20.00 WIB)
+        // Jam Operasional toko (09.00 - 20.00 WIB)
         function checkOperationalStatus() {
             const statusEl = document.getElementById('status-operational');
             const now = new Date();
             const hours = now.getHours();
-            
             const isOpen = hours >= 9 && hours < 20;
 
             if (isOpen) {
                 statusEl.innerHTML = `
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
                     <span class="text-emerald-400 font-bold">BUKA SEKARANG</span> (09.00 - 20.00)
                 `;
             } else {
                 statusEl.innerHTML = `
-                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
                     <span class="text-rose-400 font-bold">TUTUP</span> (Buka Jam 09.00 WIB)
                 `;
             }
         }
 
-        // Filter Kategori
+        // Filter Kategori Tab
         function setCategory(cat, btn) {
             currentCategory = cat;
             document.querySelectorAll('.category-btn').forEach(b => {
-                b.classList.remove('bg-cyan-500', 'text-dark-900', 'font-semibold', 'shadow-md', 'shadow-cyan-500/20');
-                b.classList.add('bg-dark-800', 'text-stone-400', 'border-slate-700');
+                b.classList.remove('bg-gradient-to-r', 'from-cyan-400', 'to-cyan-500', 'text-dark-950', 'font-extrabold', 'shadow-lg', 'shadow-cyan-500/30');
+                b.classList.add('bg-dark-800', 'text-stone-400', 'border-slate-700/80');
             });
-            btn.classList.remove('bg-dark-800', 'text-stone-400', 'border-slate-700');
-            btn.classList.add('bg-cyan-500', 'text-dark-900', 'font-semibold', 'shadow-md', 'shadow-cyan-500/20');
+            btn.classList.remove('bg-dark-800', 'text-stone-400', 'border-slate-700/80');
+            btn.classList.add('bg-gradient-to-r', 'from-cyan-400', 'to-cyan-500', 'text-dark-950', 'font-extrabold', 'shadow-lg', 'shadow-cyan-500/30');
 
             renderMenu();
         }
 
-        // Render Menu Grid
+        // Render Cards Menu
         function renderMenu() {
             const container = document.getElementById('menu-container');
             const searchVal = document.getElementById('search-input').value.toLowerCase();
@@ -397,29 +563,35 @@
 
             if (filtered.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-full text-center py-12 text-stone-500">
-                        <i class="fa-solid fa-ice-cream text-4xl mb-3 text-slate-600"></i>
-                        <p class="text-sm">Varian rasa Es Mambo tidak ditemukan.</p>
+                    <div class="col-span-full text-center py-16 text-stone-500">
+                        <i class="fa-solid fa-ice-cream text-5xl mb-3 text-slate-700 animate-bounce"></i>
+                        <p class="text-sm font-medium">Varian rasa Es Mambo tidak ditemukan.</p>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = filtered.map(item => `
-                <div class="bg-dark-800 border border-slate-700/80 rounded-2xl overflow-hidden card-hover flex flex-col justify-between">
+                <div class="bg-dark-800/90 border border-slate-700/80 rounded-3xl overflow-hidden card-hover flex flex-col justify-between shadow-xl">
                     <div>
-                        <div class="relative h-36 overflow-hidden bg-slate-900">
-                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
-                            ${item.badge ? `<span class="absolute top-3 left-3 bg-cyan-400 text-dark-900 font-extrabold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">${item.badge}</span>` : ''}
+                        <div class="relative h-40 overflow-hidden bg-slate-900 group">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            ${item.badge ? `<span class="absolute top-3 left-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-dark-950 font-black text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">${item.badge}</span>` : ''}
                         </div>
                         <div class="p-4">
-                            <h3 class="font-bold text-white text-base">${item.title}</h3>
-                            <p class="text-stone-400 text-xs mt-1 line-clamp-2">${item.desc}</p>
+                            <h3 class="font-bold text-white text-base tracking-tight">${item.title}</h3>
+                            <p class="text-stone-400 text-xs mt-1 leading-relaxed line-clamp-2">${item.desc}</p>
+                            
+                            <!-- Badges Report Terjual -->
+                            <div class="flex items-center gap-1.5 text-xs text-amber-300/90 mt-3 font-semibold bg-amber-500/10 px-2.5 py-1 rounded-xl w-fit border border-amber-500/20">
+                                <i class="fa-solid fa-fire text-amber-400"></i>
+                                <span>Terjual: <strong class="text-white">${item.sold} pcs</strong></span>
+                            </div>
                         </div>
                     </div>
                     <div class="px-4 pb-4 pt-1 flex items-center justify-between border-t border-slate-700/60">
-                        <span class="font-extrabold text-cyan-400 text-base">Rp ${item.price.toLocaleString('id-ID')}</span>
-                        <button onclick="openProductModal(${item.id})" class="px-3.5 py-2 bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-dark-900 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+                        <span class="font-black text-cyan-400 text-base">Rp ${item.price.toLocaleString('id-ID')}</span>
+                        <button onclick="openProductModal(${item.id})" class="btn-shimmer px-4 py-2 bg-cyan-500/20 hover:bg-cyan-400 text-cyan-300 hover:text-dark-950 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 border border-cyan-500/30">
                             <i class="fa-solid fa-plus"></i> Pesan
                         </button>
                     </div>
@@ -436,6 +608,7 @@
             document.getElementById('modal-title').innerText = selectedProduct.title;
             document.getElementById('modal-desc').innerText = selectedProduct.desc;
             document.getElementById('modal-price').innerText = `Rp ${selectedProduct.price.toLocaleString('id-ID')}`;
+            document.getElementById('modal-sold').innerHTML = `<i class="fa-solid fa-fire text-amber-400"></i> Terjual: ${selectedProduct.sold} pcs`;
             document.getElementById('modal-qty').innerText = modalQty;
             document.getElementById('modal-note').value = '';
 
@@ -485,12 +658,12 @@
             showToast(`" ${selectedProduct.title} " ditambahkan`);
         }
 
-        // Cart UI Update
+        // Cart UI Update Logic
         function updateCartUI() {
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-            // Badge
+            // Badge Update
             const badge = document.getElementById('cart-badge');
             if (totalQty > 0) {
                 badge.innerText = totalQty;
@@ -499,40 +672,40 @@
                 badge.classList.add('hidden');
             }
 
-            // Floating Cart
+            // Floating Cart Bar Animation
             const floatingCart = document.getElementById('floating-cart');
             if (totalQty > 0) {
-                floatingCart.classList.remove('translate-y-28', 'opacity-0');
+                floatingCart.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
                 document.getElementById('floating-qty').innerText = `${totalQty} Es Mambo`;
                 document.getElementById('floating-total').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
             } else {
-                floatingCart.classList.add('translate-y-28', 'opacity-0');
+                floatingCart.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
             }
 
-            // Drawer Items
+            // Cart Items Render
             const cartItemsEl = document.getElementById('cart-items');
             if (cart.length === 0) {
                 cartItemsEl.innerHTML = `
-                    <div class="text-center py-16 text-stone-500">
-                        <i class="fa-solid fa-basket-shopping text-4xl mb-2 text-slate-600"></i>
-                        <p class="text-xs">Keranjang Es Mambo Anda masih kosong.</p>
+                    <div class="text-center py-20 text-stone-500">
+                        <i class="fa-solid fa-basket-shopping text-5xl mb-3 text-slate-700"></i>
+                        <p class="text-xs font-medium">Keranjang Es Mambo Anda masih kosong.</p>
                     </div>
                 `;
             } else {
                 cartItemsEl.innerHTML = cart.map((item, idx) => `
-                    <div class="p-3 bg-dark-900 border border-slate-700/80 rounded-xl flex items-center justify-between gap-3">
+                    <div class="p-3.5 bg-dark-950/80 border border-slate-700/80 rounded-2xl flex items-center justify-between gap-3 shadow-md">
                         <div class="flex-1">
                             <h4 class="font-bold text-white text-xs">${item.title}</h4>
-                            <p class="text-[11px] text-cyan-400 font-semibold mt-0.5">Rp ${item.price.toLocaleString('id-ID')} / pcs</p>
+                            <p class="text-[11px] text-cyan-400 font-bold mt-0.5">Rp ${item.price.toLocaleString('id-ID')} / pcs</p>
                             ${item.note ? `<p class="text-[10px] text-stone-400 italic mt-0.5">"${item.note}"</p>` : ''}
                         </div>
                         <div class="flex items-center gap-2">
-                            <div class="flex items-center bg-slate-800 rounded-lg">
-                                <button onclick="updateCartItemQty(${idx}, -1)" class="w-6 h-6 text-stone-300 hover:text-white font-bold flex items-center justify-center text-xs">-</button>
-                                <span class="w-5 text-center text-xs font-bold text-white">${item.qty}</span>
-                                <button onclick="updateCartItemQty(${idx}, 1)" class="w-6 h-6 text-stone-300 hover:text-white font-bold flex items-center justify-center text-xs">+</button>
+                            <div class="flex items-center bg-dark-800 rounded-xl border border-slate-700 px-1">
+                                <button onclick="updateCartItemQty(${idx}, -1)" class="w-6 h-6 text-stone-300 hover:text-cyan-400 font-black flex items-center justify-center text-xs">-</button>
+                                <span class="w-5 text-center text-xs font-black text-white">${item.qty}</span>
+                                <button onclick="updateCartItemQty(${idx}, 1)" class="w-6 h-6 text-stone-300 hover:text-cyan-400 font-black flex items-center justify-center text-xs">+</button>
                             </div>
-                            <button onclick="removeCartItem(${idx})" class="text-stone-500 hover:text-rose-400 p-1">
+                            <button onclick="removeCartItem(${idx})" class="text-stone-500 hover:text-rose-400 p-1.5 transition-colors">
                                 <i class="fa-regular fa-trash-can text-xs"></i>
                             </button>
                         </div>
@@ -576,7 +749,7 @@
             }
         }
 
-        // WhatsApp Order Dispatch
+        // WhatsApp Order Dispatch (Hanya Nama, Tanpa Alamat/Meja)
         function sendToWhatsApp() {
             if (cart.length === 0) {
                 alert("Keranjang belanja Anda masih kosong!");
@@ -584,7 +757,6 @@
             }
 
             const name = document.getElementById('cust-name').value.trim();
-            const address = document.getElementById('cust-address').value.trim();
 
             if (!name) {
                 alert("Harap isi Nama Pemesan terlebih dahulu.");
@@ -592,21 +764,24 @@
                 return;
             }
 
-            if (!address) {
-                alert("Harap isi Alamat / Nomor Meja Anda.");
-                document.getElementById('cust-address').focus();
-                return;
-            }
+            // Update statistik terjual secara otomatis & simpan
+            cart.forEach(cartItem => {
+                const targetProduct = menuData.find(m => m.id === cartItem.id);
+                if (targetProduct) {
+                    targetProduct.sold += cartItem.qty;
+                }
+            });
+            saveSoldData();
+            renderMenu();
 
             const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const totalPcs = cart.reduce((sum, item) => sum + item.qty, 0);
 
-            // WhatsApp Message Format
+            // Format Pesan WhatsApp
             let text = `🧊 *PESANAN BARU - ES MAMBO FEARLESS*\n`;
-            text += `-------------------------------------------\n`;
+            text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
             text += `👤 *Nama Pemesan:* ${name}\n`;
-            text += `📍 *Alamat / Meja:* ${address}\n`;
-            text += `-------------------------------------------\n\n`;
+            text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
             text += `📝 *RINCIAN PESANAN (${totalPcs} Pcs):*\n`;
 
             cart.forEach((item, i) => {
@@ -616,24 +791,81 @@
                 text += `   └ Subtotal: Rp ${sub.toLocaleString('id-ID')}\n\n`;
             });
 
-            text += `-------------------------------------------\n`;
+            text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
             text += `💰 *TOTAL PEMBAYARAN:* *Rp ${totalPrice.toLocaleString('id-ID')}*\n`;
-            text += `-------------------------------------------\n`;
-            text += `Mohon segera diproses ya, terima kasih! 🙏`;
+            text += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+            text += `Terima kasih! Mohon segera diproses ya 🙏`;
 
             const encodedURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
             window.open(encodedURL, '_blank');
+        }
+
+        // Report Penjualan Modal Logic (Statistik Terjual & Omzet)
+        function openReportModal() {
+            const sortedMenu = [...menuData].sort((a, b) => b.sold - a.sold);
+            const totalSoldAll = menuData.reduce((sum, item) => sum + item.sold, 0);
+            const totalRevenue = menuData.reduce((sum, item) => sum + (item.sold * item.price), 0);
+            const maxSold = sortedMenu[0]?.sold || 1;
+
+            document.getElementById('total-sold-count').innerText = `${totalSoldAll.toLocaleString('id-ID')} Pcs`;
+            document.getElementById('total-revenue-count').innerText = `Rp ${totalRevenue.toLocaleString('id-ID')}`;
+
+            const listEl = document.getElementById('report-list');
+            listEl.innerHTML = sortedMenu.map((item, index) => {
+                const percentage = Math.round((item.sold / maxSold) * 100);
+                return `
+                    <div class="p-3 bg-dark-950/80 border border-slate-700/70 rounded-2xl space-y-1.5">
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="w-5 h-5 rounded-md bg-cyan-500/20 text-cyan-400 font-black text-[10px] flex items-center justify-center">${index + 1}</span>
+                                <span class="font-bold text-white">${item.title}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-black text-amber-400">${item.sold.toLocaleString('id-ID')} pcs</span>
+                                <span class="text-[10px] text-stone-400 ml-1.5">(Rp ${(item.sold * item.price).toLocaleString('id-ID')})</span>
+                            </div>
+                        </div>
+                        <!-- Animated Progress Bar -->
+                        <div class="w-full h-1.5 bg-dark-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-cyan-400 to-amber-400 rounded-full transition-all duration-1000" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const modal = document.getElementById('report-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeReportModal() {
+            const modal = document.getElementById('report-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function resetSalesStats() {
+            if (confirm("Apakah Anda yakin ingin mereset data statistik penjualan ke 0?")) {
+                localStorage.removeItem('es_mambo_sales');
+                menuData.forEach(item => item.sold = 0);
+                renderMenu();
+                openReportModal();
+            }
         }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
 
-            toast.classList.remove('opacity-0', '-translate-y-4');
+            toast.classList.remove('opacity-0', '-translate-y-6');
             toast.classList.add('opacity-100', 'translate-y-0');
 
             setTimeout(() => {
-                toast.classList.add('opacity-0', '-translate-y-4');
+                toast.classList.add('opacity-0', '-translate-y-6');
                 toast.classList.remove('opacity-100', 'translate-y-0');
             }, 2500);
         }
