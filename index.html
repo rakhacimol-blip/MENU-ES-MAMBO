@@ -272,8 +272,9 @@
                     <p id="modal-desc" class="text-stone-300 text-xs mt-1 leading-relaxed"></p>
                     <div class="flex items-center justify-between mt-4">
                         <p id="modal-price" class="text-xl font-black text-cyan-400">Rp 2.000</p>
-                        <span id="modal-sold" class="text-xs text-amber-300 font-bold bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/30 flex items-center gap-1.5">
-                            <i class="fa-solid fa-fire text-amber-400"></i> Terjual: 0 pcs
+                        <!-- Mengganti Kata Terjual dengan Stok -->
+                        <span id="modal-stock" class="text-xs text-cyan-300 font-bold bg-cyan-500/10 px-3 py-1.5 rounded-xl border border-cyan-500/30 flex items-center gap-1.5">
+                            <i class="fa-solid fa-boxes-stacked text-cyan-400"></i> Stok: 0 pcs
                         </span>
                     </div>
                 </div>
@@ -347,7 +348,7 @@
         </div>
     </div>
 
-    <!-- Modal Report Penjualan (Laporan Keuangan Terjual) -->
+    <!-- Modal Report Penjualan (Laporan Keuangan Terjual & Stok) -->
     <div id="report-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
         <div class="glass-modal border border-amber-500/30 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
             <div class="p-4 bg-dark-950/90 border-b border-amber-500/20 flex items-center justify-between">
@@ -406,13 +407,14 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Database Varian Es Mambo Fearless (Harga Flat Rp 2.000)
+        // Database Varian Es Mambo Fearless dengan Jumlah Stok awal
         let menuData = [
             {
                 id: 1,
                 title: "Es Mambo Matcha",
                 category: "creamy",
                 price: 2000,
+                stock: 10, // Menggunakan variabel stok (dapat disesuaikan)
                 sold: 142,
                 desc: "Rasa matcha green tea khas dengan susu manis dan tekstur super lembut.",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxIZyYc5XmVA_hX7KQxSg2H5ftFxhAIeg1VngNSWMQh9QHG-3aL90qPtGL&s=10",
@@ -423,6 +425,7 @@
                 title: "Es Mambo Coklat",
                 category: "creamy",
                 price: 2000,
+                stock: 40,
                 sold: 198,
                 desc: "Coklat pekat manis gurih dipadu susu creamy yang bikin ketagihan.",
                 image: "https://api.omela.com/storage/content-editor-images/7u2ZetZ0NO6GZFAOmkKy0yFloOeX1ytq8vpaEwZd.jpg",
@@ -433,6 +436,7 @@
                 title: "Es Mambo Stroberi",
                 category: "buah",
                 price: 2000,
+                stock: 25,
                 sold: 85,
                 desc: "Kesegaran stroberi asli dengan rasa manis asam segar yang pas.",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2U0pSWV4-d_Hznsrl9Lb3KgHtv_mVRni81xd6VTLYcnQXT3oKjPpKYJg&s=10",
@@ -443,6 +447,7 @@
                 title: "Es Mambo Moca",
                 category: "creamy",
                 price: 2000,
+                stock: 15,
                 sold: 64,
                 desc: "Perpaduan rasa kopi dan coklat moca yang harum dan nikmat.",
                 image: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXeJeiVAqzO7Zcejv6w7q9jqLk8_KZxLBycypA9RqjGJaSXI5FYk-K3bxzAGYA_c9Xircl4_4R4jVFKHAmwumpMKO6rkKYSR9xYh7RV_W_4QfxDRZg2CJ_JcBOPIVFAo4ygkM1G4fw?key=-pBQTo6-NIE4ZRPZk6A_LdB1",
@@ -453,6 +458,7 @@
                 title: "Es Mambo Coffe",
                 category: "creamy",
                 price: 2000,
+                stock: 20,
                 sold: 52,
                 desc: "Aroma kopi mantap bercampur rasa manis susu murni yang segar.",
                 image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcDLP68WzrJFDWRhbSZhwKbMHcjIgDxmKpBTUpX8hP5sFwLQ-mdAPIUN4&s=10",
@@ -463,6 +469,7 @@
                 title: "Es Mambo Nanas",
                 category: "buah",
                 price: 2000,
+                stock: 30,
                 sold: 77,
                 desc: "Ekstrak nanas tropis segar manis yang membangkitkan semangat.",
                 image: "https://img-global.cpcdn.com/steps/50e91eb8ab0c0f1f/400x400cq80/photo.jpg",
@@ -473,6 +480,7 @@
                 title: "Es Mambo Cocopandan",
                 category: "creamy",
                 price: 2000,
+                stock: 18,
                 sold: 91,
                 desc: "Aroma manis harum cocopandan tradisional yang khas dan nikmat.",
                 image: "https://cdn.yummy.co.id/content-images/images/20191222/zWmp5pDxszR0ZrIyqpu8vJIK0Jo6tNFq-31353730303536343633d41d8cd98f00b204e9800998ecf8427e.jpg?x-oss-process=image/resize,w_600,h_600,m_fill,image/format,webp",
@@ -489,14 +497,17 @@
         // Nomor WhatsApp Es Mambo Fearless
         const WHATSAPP_NUMBER = "628118805082";
 
-        // Load & Save Sold Stats in Local Storage (Persistent Data)
+        // Load & Save Stock/Sold Data in Local Storage (Persistent Data)
         function loadSoldData() {
             const savedStats = localStorage.getItem('es_mambo_sales');
             if (savedStats) {
                 const parsed = JSON.parse(savedStats);
                 menuData.forEach(item => {
                     if (parsed[item.id] !== undefined) {
-                        item.sold = parsed[item.id];
+                        item.sold = parsed[item.id].sold || item.sold;
+                        if (parsed[item.id].stock !== undefined) {
+                            item.stock = parsed[item.id].stock;
+                        }
                     }
                 });
             }
@@ -505,7 +516,7 @@
         function saveSoldData() {
             const stats = {};
             menuData.forEach(item => {
-                stats[item.id] = item.sold;
+                stats[item.id] = { sold: item.sold, stock: item.stock };
             });
             localStorage.setItem('es_mambo_sales', JSON.stringify(stats));
         }
@@ -582,10 +593,10 @@
                             <h3 class="font-bold text-white text-base tracking-tight">${item.title}</h3>
                             <p class="text-stone-400 text-xs mt-1 leading-relaxed line-clamp-2">${item.desc}</p>
                             
-                            <!-- Badges Report Terjual -->
-                            <div class="flex items-center gap-1.5 text-xs text-amber-300/90 mt-3 font-semibold bg-amber-500/10 px-2.5 py-1 rounded-xl w-fit border border-amber-500/20">
-                                <i class="fa-solid fa-fire text-amber-400"></i>
-                                <span>Terjual: <strong class="text-white">${item.sold} pcs</strong></span>
+                            <!-- Mengganti Keterangan Terjual Menjadi Stok -->
+                            <div class="flex items-center gap-1.5 text-xs text-cyan-300/90 mt-3 font-semibold bg-cyan-500/10 px-2.5 py-1 rounded-xl w-fit border border-cyan-500/20">
+                                <i class="fa-solid fa-boxes-stacked text-cyan-400"></i>
+                                <span>Stok: <strong class="text-white">${item.stock} pcs</strong></span>
                             </div>
                         </div>
                     </div>
@@ -608,7 +619,8 @@
             document.getElementById('modal-title').innerText = selectedProduct.title;
             document.getElementById('modal-desc').innerText = selectedProduct.desc;
             document.getElementById('modal-price').innerText = `Rp ${selectedProduct.price.toLocaleString('id-ID')}`;
-            document.getElementById('modal-sold').innerHTML = `<i class="fa-solid fa-fire text-amber-400"></i> Terjual: ${selectedProduct.sold} pcs`;
+            // Mengganti Tampilan Kata Terjual dengan Stok
+            document.getElementById('modal-stock').innerHTML = `<i class="fa-solid fa-boxes-stacked text-cyan-400"></i> Stok: ${selectedProduct.stock} pcs`;
             document.getElementById('modal-qty').innerText = modalQty;
             document.getElementById('modal-note').value = '';
 
@@ -635,6 +647,11 @@
         }
 
         function confirmAddToCart() {
+            if (modalQty > selectedProduct.stock) {
+                alert(`Maaf, jumlah pesanan melebihi sisa stok yang tersedia (${selectedProduct.stock} pcs).`);
+                return;
+            }
+
             const note = document.getElementById('modal-note').value.trim();
 
             const existingIndex = cart.findIndex(item => 
@@ -764,11 +781,12 @@
                 return;
             }
 
-            // Update statistik terjual secara otomatis & simpan
+            // Update stok dan jumlah terjual saat pesanan dikirim
             cart.forEach(cartItem => {
                 const targetProduct = menuData.find(m => m.id === cartItem.id);
                 if (targetProduct) {
                     targetProduct.sold += cartItem.qty;
+                    targetProduct.stock = Math.max(0, targetProduct.stock - cartItem.qty);
                 }
             });
             saveSoldData();
@@ -821,8 +839,8 @@
                                 <span class="font-bold text-white">${item.title}</span>
                             </div>
                             <div class="text-right">
-                                <span class="font-black text-amber-400">${item.sold.toLocaleString('id-ID')} pcs</span>
-                                <span class="text-[10px] text-stone-400 ml-1.5">(Rp ${(item.sold * item.price).toLocaleString('id-ID')})</span>
+                                <span class="font-black text-amber-400">${item.sold.toLocaleString('id-ID')} pcs terjual</span>
+                                <span class="text-[10px] text-cyan-300 block">Sisa Stok: ${item.stock} pcs</span>
                             </div>
                         </div>
                         <!-- Animated Progress Bar -->
@@ -851,7 +869,10 @@
         function resetSalesStats() {
             if (confirm("Apakah Anda yakin ingin mereset data statistik penjualan ke 0?")) {
                 localStorage.removeItem('es_mambo_sales');
-                menuData.forEach(item => item.sold = 0);
+                menuData.forEach(item => {
+                    item.sold = 0;
+                    item.stock = 30; // Reset stok bawaan
+                });
                 renderMenu();
                 openReportModal();
             }
